@@ -1,0 +1,173 @@
+#include <iostream>
+using namespace std;
+class Node{
+    public :
+    int data;
+    Node* next;
+    Node() {
+        this->data = 0;
+        this->next = NULL;
+    }
+    // destructor to delete a node
+    Node(int data){
+        this->data = data;
+        this->next = NULL;
+    }
+    ~Node(){
+        cout<<"Node with value: "<<this->data << "deleted" << endl;
+    }
+};
+// Insert the node at the starting  of the LL
+void insertAtHead(Node* &head, Node* &tail, int data){
+    // check for empty linked list
+    if (head == NULL)
+    {
+        Node* newNode = new Node(data);
+        head = newNode;
+        tail = newNode;
+        return;
+    }
+    else{
+        //step 1 create a Node
+        Node* newNode = new Node(data);
+        // step 2 newnode to be connected with head
+        newNode -> next = head;
+        //step 3 = update head
+        head = newNode;
+    }
+    
+} 
+// Insert the Node at the end of the LL
+void insertAtTail(Node* &head, Node* &tail, int data){
+    // check for empty linked list
+    if (head == NULL)
+    {
+        Node* newNode = new Node(data);
+        head = newNode;
+        tail = newNode;
+        return;
+    }
+    
+        //step 1 create a Node
+        Node* newNode = new Node(data);
+        // step 2 newnode to be connected with tail
+        tail -> next = newNode;
+        //step 3 = update tail
+        tail = newNode;
+    
+}
+//Print the linkd list
+void print(Node* head){
+    Node* temp = head;
+    while (temp != NULL)
+    {
+        cout<<temp->data<<" ";
+        temp = temp->next;
+    }
+    
+}
+//Find the length of linked list
+int findLength(Node* &head){
+    int len = 0;
+    Node* temp = head;
+    while (temp!= NULL)
+    {
+        temp = temp->next;
+        len++;
+    }
+    return len;
+}
+//Insert a Node at the given position in the linked list
+void insertAtPosition(int data, int position, Node* &head, Node* &tail){
+    if (head == NULL)
+    {
+        Node* newNode = new Node(data);
+        head = newNode;
+        tail = newNode;
+        return;
+    }
+//find the position prev and curr
+if (position== 0)
+{
+    insertAtHead(head, tail, data);
+    return;
+}
+int len = findLength(head);
+if (position>=len)
+{
+    insertAtTail(head, tail, data);
+    return;
+}
+//find prev and curr
+int i = 1;
+Node* prev = head;
+while (i<position){
+    prev = prev-> next;
+    i++;
+}
+Node* curr = prev->next;
+//step 2 Create a new Node
+Node* newNode = new Node(data);
+//connect with the next node
+newNode->next = curr;
+//step 4 connect with the previous Node
+prev->next = newNode;
+
+}
+//Delete a node at a given position in the linked list
+void deleteNode(int position , Node* &head, Node* &tail){
+    if (head==NULL)
+    {
+        cout<<"cannot delete "<<endl;
+        return;
+    }
+    Node* curr = head;
+    Node* prev = NULL;
+    //Find the Node to delete
+    for (int  i = 0; curr!= NULL && i < position; i++)
+    {
+        prev = curr;
+        curr = curr->next;
+
+    }
+    //If position is greater than length of linked list
+    if (curr == NULL)
+    {
+        cout<<"Cannot delete"<<endl;
+        return;
+    }
+    // if deleting the head node
+    if (prev == NULL)
+    {
+        head = curr->next;
+    }
+    else{
+        prev->next = curr->next;
+    }
+    //If deleting the tail node
+    if (curr == tail)
+    {
+        tail = prev;
+    }
+    //Delete the Node
+    delete curr;
+    
+} 
+int main(){
+    Node* head = NULL;
+    Node* tail = NULL;
+    //Insert nodes at head
+    insertAtHead(head, tail, 1);
+    insertAtHead(head, tail, 2);
+    insertAtHead(head, tail, 3);
+   //Insert nodes at tail
+    insertAtTail(head, tail, 4);
+    insertAtTail(head, tail, 5);
+    //Insert nodes at a position
+    insertAtPosition(6, 2, head, tail);
+    //Delete node at a position
+    deleteNode(3, head, tail);
+    //Print the linked list
+    print(head);
+    return 0;
+}
